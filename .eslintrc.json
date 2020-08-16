@@ -1,8 +1,10 @@
 {
-  "extends": "airbnb-base",
+  "extends": [
+    "airbnb-base"
+  ],
   "rules": {
     "no-underscore-dangle": ["warn", {
-      "allow": "_id"
+      "allow": ["_id"]
     }]
   }
 }
