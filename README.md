@@ -21,7 +21,7 @@ $ npm run start
 
 ## Start the local server with hot-reload
 ```
-$npm run developer
+$ npm run dev
 ```
 
 ## Credits
