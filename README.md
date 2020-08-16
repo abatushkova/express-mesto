@@ -7,11 +7,11 @@ Frontend part of the app is complete. Users can change avatar or profile informa
 Backend is currently in development.
 
 ## Installation
-You will need node and npm installed globally on your machine.
+You will need node and npm installed globally on your machine, nodemon installed to the project.
 ```
 $ git clone https://github.com/abatushkova/express-mesto.git
 $ cd express-mesto
-$ npm install
+$ npm install nodemon -D
 ```
 
 ## Start the local server
