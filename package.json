@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "lint": "eslint app.js",
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
@@ -17,6 +18,7 @@
     "nodemon": "^2.0.4"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "helmet": "^4.1.0"
   }
 }
