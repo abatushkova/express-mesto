@@ -8,16 +8,12 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
-app.disable('x-powered-by');
-app.use(helmet());
-app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'unsafe-inline'"],
-    },
-  }),
-);
+app.use(helmet.contentSecurityPolicy({
+  directives: {
+    defaultSrc: ["'self'", '*'],
+  },
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/users/', userRouter);
 app.use('/cards/', cardRouter);
