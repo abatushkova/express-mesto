@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Поле обязательно для заполнения'],
     validate: {
-      validator: (link) => /https:?\/{2}(\w*\W*)+/.test(link),
+      validator: (link) => link.match(/(https?:)([\w|\W]*)/gm),
       message: 'Пожалуйста, введите корректный адрес',
     },
   },

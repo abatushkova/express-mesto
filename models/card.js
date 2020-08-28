@@ -11,7 +11,7 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Поле обязательно для заполнения'],
     validate: {
-      validator: (link) => /https:?\/{2}(\w*\W*)+/.test(link),
+      validator: (link) => link.match(/(https?:)([\w|\W]*)/gm),
       message: 'Пожалуйста, введите корректный адрес',
     },
   },
@@ -20,10 +20,11 @@ const cardSchema = new mongoose.Schema({
     ref: 'user',
     required: [true, 'Поле обязательно для заполнения'],
   },
-  likes: {
+  likes: [{
     type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
     default: [],
-  },
+  }],
   createdAt: {
     type: Date,
     default: Date.now,

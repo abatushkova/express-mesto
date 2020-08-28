@@ -1,12 +1,16 @@
 const express = require('express');
-const path = require('path');
 const helmet = require('helmet');
-const userRouter = require('./routes/users-router');
-const cardRouter = require('./routes/cards-router');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const userRouter = require('./routes/users');
+const cardRouter = require('./routes/cards');
 
 const { PORT = 3000 } = process.env;
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(helmet.contentSecurityPolicy({
   directives: {
@@ -14,9 +18,22 @@ app.use(helmet.contentSecurityPolicy({
   },
 }));
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/users/', userRouter);
-app.use('/cards/', cardRouter);
+mongoose.connect('mongodb://localhost:27017/mestodb', {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+  useFindAndModify: false,
+});
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: '5f46550d9da90e1a42013865',
+  };
+
+  next();
+});
+
+app.use('/users', userRouter);
+app.use('/cards', cardRouter);
 
 app.use((req, res) => {
   res.status(404).send({
@@ -24,4 +41,6 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
+});
