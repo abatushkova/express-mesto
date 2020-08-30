@@ -1,44 +1,48 @@
 const Card = require('../models/card');
+const {
+  handleDocNotFoundError,
+  handleCastError,
+  handleValidationError,
+  handleServerError,
+} = require('../helpers/error');
 
 const getCards = (req, res) => {
-  Card.find({}, (err, cards) => {
-    if (err) {
-      return res.status(404).send({
-        message: 'Список карточек не найден',
-      });
-    }
-
-    return res.status(200).send(cards);
-  })
-    .populate('owner');
+  Card.find({})
+    .populate('owner')
+    .then((users) => res.status(200).send(users))
+    .catch(() => handleServerError(res));
 };
 
 const createCard = (req, res) => {
   const { name, link } = req.body;
 
-  return Card.countDocuments({})
-    .then(() => Card.create({
-      name, link, owner: req.user._id,
-    }))
+  Card.create({
+    name, link, owner: req.user._id,
+  })
     .then((card) => res.status(200).send(card))
-    .catch(() => res.status(400).send({
-      message: 'Данные при создании карточки не прошли валидацию',
-    }));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        return handleValidationError(err, res);
+      }
+
+      return handleServerError(res);
+    });
 };
 
 const deleteCard = (req, res) => {
-  Card.findOneAndRemove(
-    { _id: req.params.cardId },
-    (err, card) => {
-      if (err) {
-        return res.status(500).send({
-          message: 'На сервере произошла ошибка',
-        });
+  Card.findOneAndDelete({ _id: req.params.cardId })
+    .orFail()
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
+      if (err.name === 'DocumentNotFoundError') {
+        return handleDocNotFoundError(res);
+      }
+      if (err.name === 'CastError') {
+        return handleCastError(err, res);
       }
 
-      return res.status(200).send(card);
-    },
-  );
+      return handleServerError(res);
+    });
 };
 
 const likeCard = (req, res) => {
@@ -46,16 +50,19 @@ const likeCard = (req, res) => {
     { _id: req.params.cardId },
     { $addToSet: { likes: req.user._id } },
     { new: true },
-    (err, card) => {
-      if (err) {
-        return res.status(500).send({
-          message: 'На сервере произошла ошибка',
-        });
+  )
+    .orFail()
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
+      if (err.name === 'DocumentNotFoundError') {
+        return handleDocNotFoundError(res);
+      }
+      if (err.name === 'CastError') {
+        return handleCastError(err, res);
       }
 
-      return res.status(200).send(card);
-    },
-  );
+      return handleServerError(res);
+    });
 };
 
 const dislikeCard = (req, res) => {
@@ -63,16 +70,19 @@ const dislikeCard = (req, res) => {
     { _id: req.params.cardId },
     { $pull: { likes: req.user._id } },
     { new: true },
-    (err, card) => {
-      if (err) {
-        return res.status(500).send({
-          message: 'На сервере произошла ошибка',
-        });
+  )
+    .orFail()
+    .then((card) => res.status(200).send(card))
+    .catch((err) => {
+      if (err.name === 'DocumentNotFoundError') {
+        return handleDocNotFoundError(res);
+      }
+      if (err.name === 'CastError') {
+        return handleCastError(err, res);
       }
 
-      return res.status(200).send(card);
-    },
-  );
+      return handleServerError(res);
+    });
 };
 
 module.exports = {
