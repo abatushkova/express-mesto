@@ -11,7 +11,7 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Поле обязательно для заполнения'],
     validate: {
-      validator: (link) => link.match(/(https?:)([\w|\W]*)/gm),
+      validator: (link) => link.match(/(https?:\/\/)([a-z0-9_\W]+\.)+([a-z0-9_\W]+)+/gmi),
       message: 'Пожалуйста, введите корректный адрес',
     },
   },
