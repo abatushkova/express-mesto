@@ -10,6 +10,12 @@ const handleDocNotFoundError = (res) => {
   });
 };
 
+const handleCastError = (err, res) => {
+  res.status(400).send({
+    message: `Запрос по ${err.path}:${err.value} не прошел валидацию`,
+  });
+};
+
 const renderErrors = (err) => {
   const errors = Object
     .values(err.errors)
@@ -17,12 +23,6 @@ const renderErrors = (err) => {
     .join('. ');
 
   return errors;
-};
-
-const handleCastError = (err, res) => {
-  res.status(400).send({
-    message: `Запрос не прошел валидацию: ${renderErrors(err)}`,
-  });
 };
 
 const handleValidationError = (err, res) => {
