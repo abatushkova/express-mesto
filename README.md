@@ -1,17 +1,17 @@
 # Mesto
 
-An educational application (frontend and backend) for yandex.praktikum, built with Express, Create React App, JavaScript, CSS.
-
-## Project status
-Frontend part of the app is complete. Users can change avatar or profile information, add, delete and like cards.<br>
-Backend is currently in development.
+An educational REST API for yandex.praktikum, built with Express, connected to MongoDB.
 
 ## Installation
-You will need node and npm installed globally on your machine, nodemon installed to the project.
+You'll need node and npm installed globally on your machine, homebrew package manager as well.  
+To interact with database use mongodb compass, postman.
 ```
 $ git clone https://github.com/abatushkova/express-mesto.git
 $ cd express-mesto
 $ npm install nodemon -D
+$ npm install express
+$ npm install mongoose
+$ npm install body-parser
 ```
 
 ## Start the local server
