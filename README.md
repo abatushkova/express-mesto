@@ -23,6 +23,3 @@ $ npm run start
 ```
 $ npm run dev
 ```
-
-## Credits
-Alena Batushkova - junior web developer
